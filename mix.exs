@@ -15,7 +15,7 @@ defmodule AshPostgresPartition.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       description: description(),
       package: package(),
-      docs: docs(),
+      docs: &docs/0,
       source_url: @source_url
     ]
   end
@@ -49,7 +49,7 @@ defmodule AshPostgresPartition.MixProject do
       {:spark, "~> 2.4"},
       {:ash_postgres, "~> 2.6"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:igniter, "~> 0.7", optional: true}
+      {:igniter, "~> 0.7"}
     ]
   end
 
@@ -67,13 +67,18 @@ defmodule AshPostgresPartition.MixProject do
       source_ref: "v#{@version}",
       source_url: @source_url,
       extras: [
-        "README.md"
+        "README.md",
+        {"documentation/dsls/DSL-AshPostgresPartition.md", search_data: Spark.Docs.search_data_for(AshPostgresPartition)}
       ],
       groups_for_modules: [
         Extension: [
           AshPostgresPartition
         ]
-      ]
+      ],
+      groups_for_extras: [
+        Reference: ~r"documentation/dsls"
+      ],
+      source_url_pattern: "#{@source_url}/blob/main/%{path}#L%{line}"
     ]
   end
 end

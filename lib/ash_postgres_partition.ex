@@ -1,6 +1,8 @@
 defmodule AshPostgresPartition do
   @moduledoc """
-  Ash Postgres Partition is an existiong for Ash Resources enabeling tools for partitioning
+  Ash Postgres Partition is an extension for Ash Resources
+  It makes it easier to add partitions and to manage them
+  It also supports having tenants
   """
 
   @partition %Spark.Dsl.Section{
@@ -14,7 +16,7 @@ defmodule AshPostgresPartition do
       attribute: [
         type: :atom,
         required: true,
-        doc: "What columns to use for partitioning"
+        doc: "What attribute to use for partitioning"
       ],
       name: [
         type: {:fun, 2},
@@ -33,10 +35,51 @@ defmodule AshPostgresPartition do
         keys: [
           count: [required: false, type: :integer, doc: "When using `:hash` type you must also provide the number of partitions"]
         ],
-        default: []
+        default: [],
+        doc: "When using `:hash` type, you must provide a `:count` option with number of partitions to create"
       ]
     ],
-    describe: "Configure how to partition the resource"
+    describe: ~S"""
+    Example of how to use this to add a `:list` type partition to a resource
+    ```elixir
+      defmodule MyResource do
+        use Ash.Resource,
+          domain: MyDomain,
+          data_layer: AshPostgres.DataLayer,
+          extensions: [AshPostgresPartition]
+
+        attributes do
+          uuid_v7_primary_key(:id)
+
+          attribute(:key, :string, primary_key?: true, allow_nil?: false)
+          attribute(:data, :string)
+
+          update_timestamp(:updated_at, writable?: true)
+          create_timestamp(:inserted_at, writable?: true)
+        end
+
+        postgres do
+          table("mytable")
+          repo(MyRepo)
+        end
+
+        actions do
+          defaults([:create, :read])
+          default_accept([:key, :data])
+        end
+
+        partition do
+          type(:list)
+          attribute(:key)
+          name fn table, key -> {:ok, table <> "_" <> key} end
+        end
+
+        multitenancy do
+          strategy(:context)
+        end
+      end
+    ```
+    """
   }
 
   use Spark.Dsl.Extension,
