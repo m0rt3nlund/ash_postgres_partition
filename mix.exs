@@ -9,7 +9,10 @@ defmodule AshPostgresPartition.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      description: description(),
+      package: package(),
+      source_url: "https://github.com/m0rt3nlund/ash_postgres_partition"
     ]
   end
 
@@ -22,6 +25,15 @@ defmodule AshPostgresPartition.MixProject do
     [
       extra_applications: [:logger]
     ]
+  end
+
+  def description(),
+    do: ~S"""
+    Ash extension to help creating and checking for the existence of partitions
+    """
+
+  def package do
+    []
   end
 
   # Run "mix help deps" to learn about dependencies.
