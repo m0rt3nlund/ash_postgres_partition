@@ -1,6 +1,6 @@
 # AshPostgresPartition
 
-**TODO: Add description**
+This library is a helper for adding partitions in Ash using AshPostgres
 
 ## Installation
 
@@ -14,8 +14,3 @@ def deps do
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/ash_postgres_partition>.
-
