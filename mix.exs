@@ -33,7 +33,10 @@ defmodule AshPostgresPartition.MixProject do
     """
 
   def package do
-    []
+    [
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/m0rt3nlund/ash_postgres_partition"}
+    ]
   end
 
   # Run "mix help deps" to learn about dependencies.
@@ -41,7 +44,8 @@ defmodule AshPostgresPartition.MixProject do
     [
       {:spark, "~> 2.4"},
       {:ash_postgres, "~> 2.6"},
-      {:sourceror, "~> 1.7", only: [:dev, :test]}
+      {:sourceror, "~> 1.7", only: [:dev, :test]},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
